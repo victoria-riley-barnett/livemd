@@ -42,6 +42,7 @@ jobs:
           targets: ${{ matrix.target }}
 
       - name: Ensure rust target and install native toolchain (Linux)
+        shell: bash
         # Simplified: assign matrix target to TARGET, avoid nested substitutions, and use unquoted heredoc
         run: |
           TARGET=${{ matrix.target }}
