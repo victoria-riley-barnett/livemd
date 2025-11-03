@@ -41,6 +41,55 @@ jobs:
         with:
           targets: ${{ matrix.target }}
 
+      - name: Ensure rust target and install native toolchain (Linux)
+        # Run for all matrix entries; install additional packages on ubuntu runners as needed
+        run: |
+          # Ensure the rustup target is installed (idempotent)
+          rustup target add ${{ matrix.target }} || true
+
+          # On Ubuntu runners, install native linkers / toolchains needed for some targets
+          if [ "${{ matrix.os }}" = "ubuntu-latest" ]; then
+            sudo apt-get update
+            # General build deps helpful for many crates
+            sudo apt-get install -y pkg-config build-essential curl ca-certificates
+
+            case "${{ matrix.target }}" in
+              aarch64-unknown-linux-gnu)
+                sudo apt-get install -y gcc-aarch64-linux-gnu
+                mkdir -p .cargo
+                cat > .cargo/config.toml <<'EOF'
+[target.aarch64-unknown-linux-gnu]
+linker = "aarch64-linux-gnu-gcc"
+EOF
+                ;;
+
+              *-unknown-linux-musl)
+                # Install musl toolchain for static builds
+                sudo apt-get install -y musl-tools musl-dev
+                mkdir -p .cargo
+                cat > .cargo/config.toml <<'EOF'
+[target.$(echo "${{ matrix.target }}")]
+linker = "musl-gcc"
+rustflags = ["-C", "target-feature=-crt-static"]
+EOF
+                ;;
+
+              *-pc-windows-gnu)
+                # mingw for windows-gnu cross linking
+                sudo apt-get install -y mingw-w64
+                mkdir -p .cargo
+                cat > .cargo/config.toml <<'EOF'
+[target.${{ matrix.target }}]
+linker = "x86_64-w64-mingw32-gcc"
+EOF
+                ;;
+
+              *)
+                # No extra packages needed for other targets by default
+                ;;
+            esac
+          fi
+
       - name: Build release binary
         run: cargo build --release --target ${{ matrix.target }}
 
