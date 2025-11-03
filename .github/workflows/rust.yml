@@ -59,30 +59,24 @@ jobs:
               aarch64-unknown-linux-gnu)
                 sudo apt-get install -y gcc-aarch64-linux-gnu
                 mkdir -p .cargo
-                cat > .cargo/config.toml <<EOF
-[target.aarch64-unknown-linux-gnu]
-linker = "aarch64-linux-gnu-gcc"
-EOF
+                echo "[target.aarch64-unknown-linux-gnu]" > .cargo/config.toml
+                echo "linker = \"aarch64-linux-gnu-gcc\"" >> .cargo/config.toml
                 ;;
 
               *-unknown-linux-musl)
                 # Install musl toolchain for static builds
                 sudo apt-get install -y musl-tools
                 mkdir -p .cargo
-                cat > .cargo/config.toml <<EOF
-[target.${TARGET}]
-linker = "musl-gcc"
-EOF
+                echo "[target.$TARGET]" > .cargo/config.toml
+                echo "linker = \"musl-gcc\"" >> .cargo/config.toml
                 ;;
 
               *-pc-windows-gnu)
                 # mingw for windows-gnu cross linking
                 sudo apt-get install -y mingw-w64
                 mkdir -p .cargo
-                cat > .cargo/config.toml <<EOF
-[target.${TARGET}]
-linker = "x86_64-w64-mingw32-gcc"
-EOF
+                echo "[target.$TARGET]" > .cargo/config.toml
+                echo "linker = \"x86_64-w64-mingw32-gcc\"" >> .cargo/config.toml
                 ;;
 
               *)
