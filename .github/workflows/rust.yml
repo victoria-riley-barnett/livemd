@@ -42,10 +42,12 @@ jobs:
           targets: ${{ matrix.target }}
 
       - name: Ensure rust target and install native toolchain (Linux)
-        # Run for all matrix entries; install additional packages on ubuntu runners as needed
+        # Simplified: assign matrix target to TARGET, avoid nested substitutions, and use unquoted heredoc
         run: |
+          TARGET=${{ matrix.target }}
+
           # Ensure the rustup target is installed (idempotent)
-          rustup target add ${{ matrix.target }} || true
+          rustup target add "$TARGET" || true
 
           # On Ubuntu runners, install native linkers / toolchains needed for some targets
           if [ "${{ matrix.os }}" = "ubuntu-latest" ]; then
@@ -53,11 +55,11 @@ jobs:
             # General build deps helpful for many crates
             sudo apt-get install -y pkg-config build-essential curl ca-certificates
 
-            case "${{ matrix.target }}" in
+            case "$TARGET" in
               aarch64-unknown-linux-gnu)
                 sudo apt-get install -y gcc-aarch64-linux-gnu
                 mkdir -p .cargo
-                cat > .cargo/config.toml <<'EOF'
+                cat > .cargo/config.toml <<EOF
 [target.aarch64-unknown-linux-gnu]
 linker = "aarch64-linux-gnu-gcc"
 EOF
@@ -65,12 +67,11 @@ EOF
 
               *-unknown-linux-musl)
                 # Install musl toolchain for static builds
-                sudo apt-get install -y musl-tools musl-dev
+                sudo apt-get install -y musl-tools
                 mkdir -p .cargo
-                cat > .cargo/config.toml <<'EOF'
-[target.$(echo "${{ matrix.target }}")]
+                cat > .cargo/config.toml <<EOF
+[target.${TARGET}]
 linker = "musl-gcc"
-rustflags = ["-C", "target-feature=-crt-static"]
 EOF
                 ;;
 
@@ -78,8 +79,8 @@ EOF
                 # mingw for windows-gnu cross linking
                 sudo apt-get install -y mingw-w64
                 mkdir -p .cargo
-                cat > .cargo/config.toml <<'EOF'
-[target.${{ matrix.target }}]
+                cat > .cargo/config.toml <<EOF
+[target.${TARGET}]
 linker = "x86_64-w64-mingw32-gcc"
 EOF
                 ;;
