@@ -97,7 +97,7 @@ livemd loads themes in this order:
 Invalid colors fall back to white. Check terminal output for parsing errors.
 
 ## Example: My catppuccin-mocha variant
-```
+```json
 === CATPPUCCIN MOCHA THEME ===
 {
   "heading": [
