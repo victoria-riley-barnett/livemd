@@ -99,7 +99,16 @@ sudo cp target/release/livemd /usr/local/bin/
    livemd --query "Explain Rust" --llm-cmd "aichat"
    ```
 
-For convenience, create an alias in your shell that includes `--llm_cmd` and `--query`:
+For convenience, add a function to your `~/.zshrc` (or `~/.bashrc`) that handles the query without quotes:
+```bash
+ai() {
+    livemd --llm_cmd "aichat" --query "$*"
+}
+# Then use: ai Explain Rust
+```
+Reload your shell with `source ~/.zshrc`.
+
+You can also make an alias if you prefer:
 ```bash
 alias ai='livemd --llm-cmd "aichat" --query'
 # Then use: ai "Explain Rust"
