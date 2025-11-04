@@ -140,7 +140,7 @@ Powered by [clap](https://github.com/clap-rs/clap) for command-line parsing:
 - `--speed <SECONDS>`: Delay between chunks (default: 0.005)
 - `--chunk-size <BYTES>`: Max chunk size before flush (default: 3200)
 - `--strip-boxes`: Convert ASCII boxes to Markdown headers
-- `--aichat-cmd <CMD>`: AI command to use (default: aichat)
+- `--llm-cmd <CMD>`: AI tool to invoke
 - `--theme <THEME>`: Color theme (dark/light/mono, default: dark)
 - `--theme-file <PATH>`: Path to custom theme JSON file
 - `--no-inject`: Skip Markdown instruction injection
