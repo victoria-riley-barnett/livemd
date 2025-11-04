@@ -6,7 +6,7 @@
 set -e
 
 REPO="victoria-riley-barnett/livemd"
-INSTALL_DIR="${INSTALL_DIR:-/usr/local/bin}"
+INSTALL_DIR="${INSTALL_DIR:-$HOME/.local/bin}"
 
 # Colors for output
 RED='\033[0;31m'
@@ -80,9 +80,11 @@ install_binary() {
     info "Installing to $INSTALL_DIR..."
     if [ ! -w "$INSTALL_DIR" ]; then
         warn "Need sudo to install to $INSTALL_DIR"
+        sudo mkdir -p "$INSTALL_DIR"
         sudo tar -xzf "/tmp/$BINARY_NAME.tar.gz" -C "$INSTALL_DIR"
         sudo chmod +x "$INSTALL_DIR/livemd"
     else
+        mkdir -p "$INSTALL_DIR"
         tar -xzf "/tmp/$BINARY_NAME.tar.gz" -C "$INSTALL_DIR"
         chmod +x "$INSTALL_DIR/livemd"
     fi

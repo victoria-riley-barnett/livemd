@@ -42,6 +42,10 @@ Download pre-built binaries for your platform from the [GitHub Releases](https:/
 ```bash
 curl -fsSL https://raw.githubusercontent.com/victoria-riley-barnett/livemd/main/install.sh | bash
 ```
+*By default, installs to `~/.local/bin`. To install to a different directory, set `INSTALL_DIR`:*
+```bash
+INSTALL_DIR=/usr/local/bin curl -fsSL https://raw.githubusercontent.com/victoria-riley-barnett/livemd/main/install.sh | bash
+```
 
 **Manual Installation:**
 ```bash
@@ -54,7 +58,7 @@ curl -fsSL https://raw.githubusercontent.com/victoria-riley-barnett/livemd/main/
 
 # Extract and install
 tar xzf livemd-*.tar.gz  # or unzip on Windows
-sudo mv livemd /usr/local/bin/
+mv livemd ~/.local/bin/  # or sudo mv livemd /usr/local/bin/
 ```
 
 ### Option 2: Homebrew

@@ -1,9 +1,9 @@
 class Livemd < Formula
   desc "Simple Markdown streaming tool for terminals"
   homepage "https://github.com/victoria-riley-barnett/livemd"
-  url "https://github.com/victoria-riley-barnett/livemd/archive/refs/tags/v0.1.0.tar.gz"
-  sha256 "PLACEHOLDER_SHA256"
-  license "MIT OR Apache-2.0"
+  url "https://github.com/victoria-riley-barnett/livemd/archive/refs/tags/v0.1.1.tar.gz"
+  sha256 "af5b188b117069b02e9aeaca954efb155d9a1c590a125b37c609a5ce038f16ab"
+  license "MIT"
 
   depends_on "rust" => :build
 
