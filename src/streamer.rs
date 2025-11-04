@@ -621,12 +621,16 @@ impl MinimalStreamer {
             query_str = format!("Please respond only in Markdown.\n{}", query);
         }
 
-        // Build the full command string with query
-        let full_cmd = format!("{} {}", llm_cmd, query_str);
+        // Parse the LLM command into program and arguments
+        let mut parts = llm_cmd.split_whitespace();
+        let program = parts.next().ok_or("Invalid LLM command: no program specified")?;
+        let mut args: Vec<String> = parts.map(|s| s.to_string()).collect();
+        
+        // Add the query as the final argument, properly quoted
+        args.push(shell_words::quote(&query_str).to_string());
 
-        let mut child = std::process::Command::new("sh")
-            .arg("-c")
-            .arg(&full_cmd)
+        let mut child = std::process::Command::new(program)
+            .args(&args)
             .stdout(Stdio::piped())
             .spawn()?;
 
