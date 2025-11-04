@@ -99,10 +99,10 @@ sudo cp target/release/livemd /usr/local/bin/
    livemd --query "Explain Rust" --llm_cmd "aichat"
    ```
 
-For convenience, create an alias in your shell:
+For convenience, create an alias in your shell that includes `--llm_cmd` and `--query`:
 ```bash
-alias aimd='livemd --llm_cmd "aichat"'
-# Then use: aimd "Explain Rust"
+alias ai='livemd --llm_cmd "aichat" --query'
+# Then use: ai "Explain Rust"
 ```
 
 ## Usage
