@@ -82,7 +82,7 @@ sudo cp target/release/livemd /usr/local/bin/
 
 ## AI Tool Setup
 
-`livemd --query` requires an AI/LLM tool to process queries. You must specify the command using `--llm_cmd`.
+`livemd --query` requires an AI/LLM tool to process queries. You must specify the command using `--llm-cmd`.
 
 ### Example with aichat
 
@@ -96,12 +96,12 @@ sudo cp target/release/livemd /usr/local/bin/
 
 3. Use with livemd:
    ```bash
-   livemd --query "Explain Rust" --llm_cmd "aichat"
+   livemd --query "Explain Rust" --llm-cmd "aichat"
    ```
 
 For convenience, create an alias in your shell that includes `--llm_cmd` and `--query`:
 ```bash
-alias ai='livemd --llm_cmd "aichat" --query'
+alias ai='livemd --llm-cmd "aichat" --query'
 # Then use: ai "Explain Rust"
 ```
 
