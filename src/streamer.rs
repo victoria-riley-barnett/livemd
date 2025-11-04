@@ -621,8 +621,12 @@ impl MinimalStreamer {
             query_str = format!("Please respond only in Markdown.\n{}", query);
         }
 
-        let mut child = std::process::Command::new(llm_cmd)
-            .arg(&query_str)
+        // Build the full command string with query
+        let full_cmd = format!("{} {}", llm_cmd, query_str);
+
+        let mut child = std::process::Command::new("sh")
+            .arg("-c")
+            .arg(&full_cmd)
             .stdout(Stdio::piped())
             .spawn()?;
 
