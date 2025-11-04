@@ -102,7 +102,7 @@ sudo cp target/release/livemd /usr/local/bin/
 For convenience, add a function to your `~/.zshrc` (or `~/.bashrc`) that handles the query without quotes:
 ```bash
 ai() {
-    livemd --llm_cmd "aichat" --query "$*"
+    livemd --llm-cmd "aichat" --query "$*"
 }
 # Then use: ai Explain Rust
 ```
