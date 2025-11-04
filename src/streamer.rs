@@ -666,4 +666,48 @@ impl MinimalStreamer {
         }
         Ok(())
     }
+
+    /// Stream content from stdin
+    pub async fn stream_stdin(&self) -> Result<(), Box<dyn std::error::Error>> {
+        use tokio::io::{AsyncReadExt, stdin};
+        let mut reader = stdin();
+        let mut buffer = String::new();
+        let mut chunk = vec![0; 4096];
+
+        loop {
+            match reader.read(&mut chunk).await {
+                Ok(0) => break, // EOF
+                Ok(n) => {
+                    let chunk_str = String::from_utf8_lossy(&chunk[..n]);
+                    buffer.push_str(&chunk_str);
+
+                    if self.config.strip_boxes {
+                        buffer = self.sanitize_boxes(&buffer);
+                    }
+
+                    let mut flush_pos;
+                    let mut chunks_processed = 0;
+                    while {
+                        flush_pos = self.find_flush_boundary(&buffer);
+                        flush_pos > 0
+                    } {
+                        let to_print = buffer.drain(..flush_pos).collect::<String>();
+                        self.print_styled_markdown(&to_print);
+                        chunks_processed += 1;
+
+                        // Only sleep after processing a few chunks to reduce latency
+                        if chunks_processed % 3 == 0 {
+                            sleep(Duration::from_secs_f64(self.config.speed)).await;
+                        }
+                    }
+                }
+                Err(e) => return Err(e.into()),
+            }
+        }
+
+        if !buffer.trim().is_empty() {
+            self.print_styled_markdown(&buffer);
+        }
+        Ok(())
+    }
 }

@@ -15,6 +15,7 @@ mod theme;
 
 use config::{ConfigFile, StreamerConfig};
 use streamer::MinimalStreamer;
+use atty::{is, Stream};
 
 #[derive(Parser)]
 #[command(name = "livemd")]
@@ -87,8 +88,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             streamer.stream_command(&cmd).await?;
         } else if let Some(query) = cli.query {
             streamer.stream_query(&query).await?;
+        } else if !is(Stream::Stdin) {
+            streamer.stream_stdin().await?;
         } else {
-            eprintln!("Error: Must specify one of --file, --cmd, or --query");
+            eprintln!("Error: Must specify one of --file, --cmd, or --query, or pipe input to stdin");
             std::process::exit(1);
         }
         Ok(())
