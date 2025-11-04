@@ -95,3 +95,22 @@ livemd loads themes in this order:
 4. Built-in themes
 
 Invalid colors fall back to white. Check terminal output for parsing errors.
+
+## Example: My catppuccin-mocha variant
+```
+=== CATPPUCCIN MOCHA THEME ===
+{
+  "heading": [
+    "#cba6f7",
+    "#89b4fa", 
+    "#a6e3a1",
+    "#fab387",
+    "#f38ba8",
+    "#89dceb"
+  ],
+  "code": "#313244",
+  "bold": "#f9e2af",
+  "italic": "#94e2d5",
+  "link": "#74c7ec",
+  "list": "#a6adc8"
+}```
