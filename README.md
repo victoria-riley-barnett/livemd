@@ -57,12 +57,8 @@ tar xzf livemd-*.tar.gz  # or unzip on Windows
 sudo mv livemd /usr/local/bin/
 ```
 
-### Option 2: Homebrew (macOS)
-
-```bash
-brew tap victoria-riley-barnett/livemd
-brew install livemd
-```
+### Option 2: Homebrew
+(for later, todo: PR homebrew)
 
 ### Option 3: Cargo Install (Rust)
 
