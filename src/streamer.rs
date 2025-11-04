@@ -614,7 +614,9 @@ impl MinimalStreamer {
 
     /// Stream output from an LLM query
     pub async fn stream_query(&self, query: &str) -> Result<(), Box<dyn std::error::Error>> {
-        let llm_cmd = self.config.llm_cmd.as_ref().ok_or("Error: --llm_cmd is required when using --query. Set it with --llm_cmd 'your-ai-tool'")?;
+        eprintln!("🤔 Thinking..."); // Simple progress indicator
+
+        let llm_cmd = self.config.llm_cmd.as_ref().ok_or("Error: No LLM command configured for queries.\n\nTo fix this:\n1. Install an AI tool like aichat: https://github.com/sigoden/aichat\n2. Set it up with: --llm-cmd 'aichat'\n3. Or configure it in ~/.config/livemd/config.json:\n   {\"llm-cmd\": \"aichat\"}\n\nSee https://github.com/victoria-riley-barnett/livemd for setup instructions.")?;
 
         let mut query_str = query.to_string();
         if self.config.inject_md_instruction {

@@ -1,10 +1,8 @@
 # livemd Themes
 
-Detailed guide to customizing colors and themes in livemd.
+livemd supports full color customization with hex colors and named colors.
 
 ## Theme Structure
-
-Themes are JSON files that define colors for different Markdown elements:
 
 ```json
 {
@@ -19,17 +17,17 @@ Themes are JSON files that define colors for different Markdown elements:
 
 ## Individual Header Colors
 
-You can specify different colors for each header level (H1-H6):
+Use an array for different colors per header level (H1-H6):
 
 ```json
 {
   "heading": [
-    "#ff6b6b",  // H1 - Red
-    "#4ecdc4",  // H2 - Teal
-    "#ffd93d",  // H3 - Yellow
-    "#6bcf7f",  // H4 - Green
-    "#4d96ff",  // H5 - Blue
-    "#f368e0"   // H6 - Pink
+    "#ff6b6b",  // H1
+    "#4ecdc4",  // H2
+    "#ffd93d",  // H3
+    "#6bcf7f",  // H4
+    "#4d96ff",  // H5
+    "#f368e0"   // H6
   ],
   "code": "#2d3748",
   "bold": "#ffd93d",
@@ -41,34 +39,16 @@ You can specify different colors for each header level (H1-H6):
 
 ## Color Formats
 
-### Hex Colors
-- Full format: `#RRGGBB` (e.g., `#ff6b6b`, `#4ecdc4`)
-- 6-digit hexadecimal RGB values
-
-### Named Colors
-- `black`, `red`, `green`, `yellow`, `blue`, `magenta`, `cyan`, `white`
-- `grey` / `gray`, `dark_grey` / `dark_gray`
+- **Hex**: `#RRGGBB` (e.g., `#ff6b6b`)
+- **Named**: `black`, `red`, `green`, `yellow`, `blue`, `magenta`, `cyan`, `white`, `grey`, `dark_grey`
 
 ## Built-in Themes
 
-### Dark Theme (default)
-Optimized for dark terminal backgrounds.
+- **`dark`** (default): For dark terminals
+- **`light`**: For light terminals
+- **`mono`**: Monochrome
 
-### Light Theme
-Optimized for light terminal backgrounds.
-
-### Mono Theme
-Monochrome theme for accessibility or limited color support.
-
-## Custom Theme Locations
-
-livemd looks for theme files in these locations (in order):
-
-1. Path specified with `--theme-file` option
-2. `~/.config/livemd/themes/` directory
-3. Current working directory
-
-## Example Themes
+## Custom Themes
 
 ### Solarized Dark
 ```json
@@ -106,6 +86,12 @@ livemd looks for theme files in these locations (in order):
 }
 ```
 
-## Theme Validation
+## Theme Locations
 
-livemd validates theme files at startup. Invalid colors will fall back to white. Check the terminal output for any theme parsing errors.
+livemd loads themes in this order:
+1. `--theme-file` option
+2. `~/.config/livemd/themes/default.json` (auto-loaded)
+3. `~/.config/livemd/themes/` directory
+4. Built-in themes
+
+Invalid colors fall back to white. Check terminal output for parsing errors.

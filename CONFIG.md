@@ -1,102 +1,65 @@
 # livemd Configuration
 
-Configuration options and setup for livemd.
+livemd supports a JSON configuration file at `~/.config/livemd/config.json` for default settings.
 
-## Configuration File
-
-livemd supports a JSON configuration file for default settings. The config file is located at:
-
-- **Linux/macOS**: `~/.config/livemd/config.json`
-- **Windows**: `%APPDATA%\livemd\config.json`
-
-### Example Configuration
+## Example Configuration
 
 ```json
 {
-  "theme_file": "themes/my_theme.json"
+  // Path to custom theme file (relative to config dir)
+  "theme-file": "themes/my_theme.json",
+
+  // LLM command - single string or object with presets
+  "llm-cmd": {
+    "default": "aichat",
+    "dev": "aichat -s dev --save-session",
+    "fast": "aichat --model gpt-4o-mini"
+  },
+
+  // Streaming speed (seconds between chunks, lower = faster)
+  "speed": 0.005,
+
+  // Max chunk size before flush
+  "chunk-size": 3200,
+
+  // Built-in theme (dark/light/mono)
+  "theme": "dark",
+
+  // Convert ASCII boxes to headers
+  "strip-boxes": false,
+
+  // Inject "respond in Markdown" instruction
+  "inject-md-instruction": true
 }
 ```
 
 ## Configuration Options
 
-### theme_file
-Path to a custom theme JSON file, relative to the config directory.
+All options can be overridden with command-line flags. Priority order: CLI flags > config file > defaults.
 
-```json
-{
-  "theme_file": "themes/dracula.json"
-}
-```
+### LLM Commands
+- Single command: `"llm-cmd": "aichat"`
+- Multiple presets: `"llm-cmd": {"preset": "command"}`
+- Use presets with: `--llm-cmd preset`
 
-## Command Line Options
+### Theme Files
+- Automatic loading: `~/.config/livemd/themes/default.json`
+- Custom path: `--theme-file path/to/theme.json`
+- Config: `"theme-file": "themes/my_theme.json"`
 
-All configuration can be overridden with command-line flags:
-
-### Streaming Options
-- `--speed <SECONDS>`: Delay between chunks (default: 0.005)
-  - Lower values = faster streaming
-  - Higher values = slower, more readable streaming
-- `--chunk-size <BYTES>`: Max chunk size before flush (default: 3200)
-
-### Content Processing
-- `--strip-boxes`: Convert ASCII box drawings to Markdown headers
-- `--no-inject`: Skip Markdown instruction injection for LLM queries
-
-### Theming
-- `--theme <THEME>`: Built-in theme (dark/light/mono)
-- `--theme-file <PATH>`: Path to custom theme JSON file
-
-### Input Sources
-- `--file <PATH>`: Markdown file to stream
-- `--cmd <COMMAND>`: Shell command to run and stream output
-- `--query <TEXT>`: AI query to process and stream
-
-## Environment Variables
-
-livemd respects these environment variables:
-
-- `LIVEMD_CONFIG_DIR`: Override config directory location
-- `LIVEMD_THEME`: Default theme (same as `--theme`)
-
-## Priority Order
-
-Configuration values are applied in this priority order (highest to lowest):
-
-1. Command-line flags
-2. Environment variables
-3. Configuration file
-4. Built-in defaults
+### Environment Variables
+- `LIVEMD_CONFIG_DIR`: Override config directory
+- `LIVEMD_THEME`: Default theme
 
 ## Directory Structure
 
-livemd expects this directory structure in your config directory:
-
 ```
 ~/.config/livemd/
-├── config.json          # Main configuration
-└── themes/              # Custom theme files
+├── config.json
+└── themes/
+    ├── default.json    # Auto-loaded
     ├── dracula.json
-    ├── solarized.json
-    └── my_theme.json
+    └── solarized.json
 ```
 
-## Example Setup
-
-1. Create the config directory:
-   ```bash
-   mkdir -p ~/.config/livemd/themes
-   ```
-
-2. Create a custom theme (see [THEMES.md](THEMES.md) for details)
-
-3. Set up config.json:
-   ```json
-   {
-     "theme_file": "themes/my_custom_theme.json"
-   }
-   ```
-
-4. Use livemd with your custom configuration:
-   ```bash
-   livemd --file document.md  # Uses your custom theme automatically
-   ```
+See [THEMES.md](THEMES.md) for theme customization.

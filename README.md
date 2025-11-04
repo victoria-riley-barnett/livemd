@@ -6,10 +6,12 @@ A Markdown streaming tool for terminals. Streams Markdown content as it's genera
 
 If you use a terminal AI tool, you're probably reading a lot of raw Markdown. 
 livemd streams Markdown content as it's generated, rendering it (kind of) nicely in your terminal.
-- Streams Markdown from AI queries (it can do files and commands too, but it's not as pretty as something like [Glow](https://github.com/charmbracelet/glow))
-- Basic terminal formatting for headers, lists, and code blocks via pulldown-cmark, termimad, and Crossterm.
+
+- **AI Queries**: Stream responses from LLM tools
+- **Multi-word queries**: No quotes needed - `livemd explain rust ownership`
+- **Terminal formatting**: Headers, lists, code blocks, tables via pulldown-cmark, termimad, and Crossterm
 - **Individual colors for each header level (H1-H6)** with full hex color support for customization
-- Configurable streaming speeds and chunk sizes
+- **Command presets**: Configure different commands for different use cases
 
 ## Important Notes
 
@@ -82,105 +84,83 @@ sudo cp target/release/livemd /usr/local/bin/
 
 ## AI Tool Setup
 
-`livemd --query` requires an AI/LLM tool to process queries. You must specify the command using `--llm-cmd`.
+`livemd --query` requires an AI/LLM tool to process queries. You must specify the command using `--llm-cmd` or by defining it in the config file.
 
 ### Example with aichat
 
 1. Install [aichat](https://github.com/sigoden/aichat) & go through its setup instructions/API key configuration. Same deal for any other AI tool you choose.
+
+2. Use with livemd:
    ```bash
-   # macOS
-   brew install aichat
-   # Or with Rust
-   cargo install aichat
+   livemd explain rust ownership
+   # or
+   livemd "explain rust ownership"
    ```
 
-3. Use with livemd:
+   **Note:** If your query contains shell glob characters (`?`, `*`, `[`, `]`), you may need to quote the query or use `noglob`:
    ```bash
-   livemd --query "Explain Rust" --llm-cmd "aichat"
+   livemd "what is gnosticism?"  # Use quotes
+   noglob livemd what is gnosticism?  # Or disable globbing
    ```
 
-For convenience, add a function to your `~/.zshrc` (or `~/.bashrc`) that handles the query without quotes:
+For convenience, add this function to your `~/.zshrc` for easy queries with punctuation:
 ```bash
 ai() {
-    livemd --llm-cmd "aichat" --query "$*"
+    noglob livemd "$@"
 }
-# Then use: ai Explain Rust
 ```
-Reload your shell with `source ~/.zshrc`.
 
-You can also make an alias if you prefer:
-```bash
-alias ai='livemd --llm-cmd "aichat" --query'
-# Then use: ai "Explain Rust"
+You can configure multiple commands in your config file for different modes:
+
+```json
+{
+  "llm-cmd": {
+    "default": "aichat",
+    "dev": "aichat -s dev --save-session",
+    "fast": "aichat --model gpt-4o-mini"
+  }
+}
 ```
+
+Then use: `livemd "query" --llm-cmd dev`
 
 ## Usage
 
 ```bash
+# Query AI and stream response (default mode)
+livemd explain rust ownership system
+
+# Or use quotes if you prefer
+livemd "explain rust ownership system"
+
 # Stream a Markdown file
 livemd --file README.md
 
 # Stream command output
 livemd --cmd "cat large_file.md"
 
-# Query AI and stream response
-livemd --query "Explain Rust's ownership system"
-
-# Stream with custom speed and theme
-livemd --file document.md --speed 0.01 --theme light
+# Stream from stdin
+livemd --stdin < file.md
+cat file.md | livemd
 ```
 
 ## Options
 
 Powered by [clap](https://github.com/clap-rs/clap) for command-line parsing:
 
+- `QUERY` (positional, multiple): AI query to process and stream (default mode)
 - `--file <PATH>`: Markdown file to stream
 - `--cmd <COMMAND>`: Shell command to run and stream output
-- `--query <TEXT>`: AI query to process and stream
 - `--speed <SECONDS>`: Delay between chunks (default: 0.005)
 - `--chunk-size <BYTES>`: Max chunk size before flush (default: 3200)
 - `--strip-boxes`: Convert ASCII boxes to Markdown headers
-- `--llm-cmd <CMD>`: AI tool to invoke
+- `--llm-cmd <CMD>`: AI tool to invoke (supports complex commands like `aichat -s dev --save-session`)
 - `--theme <THEME>`: Color theme (dark/light/mono, default: dark)
 - `--theme-file <PATH>`: Path to custom theme JSON file
+- `--stdin`: Force reading from stdin
 - `--no-inject`: Skip Markdown instruction injection
 
 See [CONFIG.md](CONFIG.md) for detailed configuration options and setup.
-
-## Themes
-
-livemd supports color themes with full hex color support for complete customization:
-
-- **`dark`** (default): For dark terminal backgrounds
-- **`light`**: For light terminal backgrounds  
-- **`mono`**: Monochrome theme
-
-### Individual Header Colors
-
-You can specify different colors for each header level (H1-H6):
-
-```json
-{
-  "heading": [
-    "#ff6b6b",  // H1 - Red
-    "#4ecdc4",  // H2 - Teal
-    "#ffd93d",  // H3 - Yellow
-    "#6bcf7f",  // H4 - Green
-    "#4d96ff",  // H5 - Blue
-    "#f368e0"   // H6 - Pink
-  ],
-  "code": "#4ecdc4",
-  "bold": "#ffd93d",
-  "italic": "#6bcf7f",
-  "link": "#4d96ff",
-  "list": "#f368e0"
-}
-```
-
-**Note:** For single color headers, use `"heading": "#ff6b6b"` instead of an array.
-
-See [THEMES.md](THEMES.md) for detailed theming documentation, including example themes and color format reference.
-
 
 ## Contributing
 

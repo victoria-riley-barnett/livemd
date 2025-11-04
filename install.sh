@@ -110,9 +110,17 @@ main() {
     info "Installation successful! 🎉"
     echo
     echo "Usage examples:"
+    echo "  livemd explain rust ownership    # AI query (no quotes needed!)"
     echo "  livemd --file README.md"
     echo "  livemd --cmd 'cat file.md'"
-    echo "  livemd --query 'Explain Rust'"
+    
+    # Note about zsh globbing
+    if [ "$SHELL" = "/bin/zsh" ] || [ "$SHELL" = "/usr/bin/zsh" ] || [ -n "$ZSH_VERSION" ]; then
+        echo
+        echo "💡 Zsh users: For queries with ?, *, [, ] characters, use quotes:"
+        echo "   livemd \"what is gnosticism?\""
+        echo "   # Or use: noglob livemd what is gnosticism?"
+    fi
 }
 
 main "$@"
