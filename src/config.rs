@@ -47,7 +47,7 @@ pub struct StreamerConfig {
     /// Whether to convert ASCII box drawings to Markdown headers
     pub strip_boxes: bool,
     /// Command to invoke for LLM functionality
-    pub llm_cmd: String,
+    pub llm_cmd: Option<String>,
     /// Whether to inject Markdown instruction for LLM queries
     pub inject_md_instruction: bool,
     /// Theme name for color selection

@@ -39,8 +39,8 @@ struct Cli {
     #[arg(long, help = "Convert simple boxed headings into Markdown headers")]
     strip_boxes: bool,
 
-    #[arg(long, default_value = "aichat", help = "Command to invoke the LLM")]
-    llm_cmd: String,
+    #[arg(long, help = "Command to invoke the LLM")]
+    llm_cmd: Option<String>,
 
     #[arg(long, default_value = "dark", help = "Color theme: dark, light, mono")]
     theme: String,

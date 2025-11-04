@@ -46,6 +46,7 @@ curl -fsSL https://raw.githubusercontent.com/victoria-riley-barnett/livemd/main/
 ```bash
 INSTALL_DIR=/usr/local/bin curl -fsSL https://raw.githubusercontent.com/victoria-riley-barnett/livemd/main/install.sh | bash
 ```
+*Note: Ensure `~/.local/bin` (or your chosen directory) is in your `PATH`. Add to your shell config if needed: `export PATH="$HOME/.local/bin:$PATH"`*
 
 **Manual Installation:**
 ```bash
@@ -77,6 +78,31 @@ git clone https://github.com/victoria-riley-barnett/livemd.git
 cd livemd
 cargo build --release
 sudo cp target/release/livemd /usr/local/bin/
+```
+
+## AI Tool Setup
+
+`livemd --query` requires an AI/LLM tool to process queries. You must specify the command using `--llm_cmd`.
+
+### Example with aichat
+
+1. Install [aichat](https://github.com/sigoden/aichat) & go through its setup instructions/API key configuration. Same deal for any other AI tool you choose.
+   ```bash
+   # macOS
+   brew install aichat
+   # Or with Rust
+   cargo install aichat
+   ```
+
+3. Use with livemd:
+   ```bash
+   livemd --query "Explain Rust" --llm_cmd "aichat"
+   ```
+
+For convenience, create an alias in your shell:
+```bash
+alias aimd='livemd --llm_cmd "aichat"'
+# Then use: aimd "Explain Rust"
 ```
 
 ## Usage

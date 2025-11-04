@@ -614,12 +614,14 @@ impl MinimalStreamer {
 
     /// Stream output from an LLM query
     pub async fn stream_query(&self, query: &str) -> Result<(), Box<dyn std::error::Error>> {
+        let llm_cmd = self.config.llm_cmd.as_ref().ok_or("Error: --llm_cmd is required when using --query. Set it with --llm_cmd 'your-ai-tool'")?;
+
         let mut query_str = query.to_string();
         if self.config.inject_md_instruction {
             query_str = format!("Please respond only in Markdown.\n{}", query);
         }
 
-        let mut child = std::process::Command::new(&self.config.llm_cmd)
+        let mut child = std::process::Command::new(llm_cmd)
             .arg(&query_str)
             .stdout(Stdio::piped())
             .spawn()?;
