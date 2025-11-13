@@ -8,3 +8,4 @@ A Markdown streaming tool for terminals. Streams Markdown content as it's genera
 - Not all Markdown features are supported, especially extended syntax
 - Compatibility has not been extensively tested.
 - Streaming may not work perfectly with all content, especially complex layouts: formatting may break, might flush imperfectly if it's not seeing the right boundaries.
+- code box parsing isn't good atm
